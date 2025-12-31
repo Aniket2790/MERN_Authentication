@@ -19,6 +19,8 @@ function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const ent of entries) {
     if (ignoreDirs.has(ent.name)) continue;
+    // skip backup bundles
+    if (ent.name.endsWith(".bundle")) continue;
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
       walk(p);
