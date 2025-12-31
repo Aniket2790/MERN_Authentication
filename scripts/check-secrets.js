@@ -19,8 +19,14 @@ function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const ent of entries) {
     if (ignoreDirs.has(ent.name)) continue;
-    // skip backup bundles
+    // skip backup bundles and example files and package-locks (common false positives)
     if (ent.name.endsWith(".bundle")) continue;
+    if (ent.name.endsWith(".example")) continue;
+    if (
+      ent.name === "package-lock.json" ||
+      ent.name.endsWith("package-lock.json")
+    )
+      continue;
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
       walk(p);
@@ -33,7 +39,14 @@ function walk(dir) {
         patterns.forEach(({ name, re }) => {
           const m = text.match(re);
           if (m) {
-            findings.push({ file: path.relative(root, p), name, match: m[0] });
+            const matched = m[0];
+            // ignore placeholder values that contain 'your_' which are intentionally in examples
+            if (/your_/i.test(matched)) return;
+            findings.push({
+              file: path.relative(root, p),
+              name,
+              match: matched,
+            });
           }
         });
       } catch (e) {
