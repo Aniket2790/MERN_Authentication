@@ -1,0 +1,12 @@
+{
+  "name": "MERN_AUTHENTICATION",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "check-secrets": "node scripts/check-secrets.js"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
+}

@@ -28,3 +28,16 @@ node scripts/check-secrets.js
 ```
 
 These are safeguards — you should still rotate any previously exposed secrets immediately.
+
+## Local git hook (pre-commit)
+
+To prevent accidental commits with secrets, I added a Husky pre-commit hook that runs `scripts/check-secrets.js`.
+
+Set it up locally by running:
+
+```powershell
+npm install
+npm run prepare
+```
+
+After that the `pre-commit` hook will run automatically before each commit.
